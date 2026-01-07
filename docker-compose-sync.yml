@@ -1,0 +1,21 @@
+services:
+  master:
+    image: postgres:18
+    container_name: master
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  slave1:
+    image: postgres:18
+    container_name: slave1
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  slave2:
+    image: postgres:18
+    container_name: slave2
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres

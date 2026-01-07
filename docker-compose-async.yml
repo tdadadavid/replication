@@ -1,0 +1,28 @@
+services:
+  master:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/master:/var/lib/postgresql/data
+    command: postgres -c max_wal_senders=10 -c wal_level=replica -c hot_standby=on
+
+  slave:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./data/slave:/var/lib/postgresql/data
+    command: postgres -c max_wal_senders=10 -c wal_level=replica -c hot_standby=on
+    depends_on:
+      - master
+    links:
+      - master:master
