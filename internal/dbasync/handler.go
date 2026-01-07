@@ -1,7 +1,15 @@
 package dbasync
 
-import "dbreplication/internal"
+import (
+	"database/sql"
+	"dbreplication/internal"
+)
 
-func Handle(users *internal.User) bool {
+type AsyncHandler struct {
+	Writer  *sql.DB   //master
+	Readers []*sql.DB //slaves
+}
+
+func (h *AsyncHandler) Handle(users *internal.User) bool {
 	return false
 }
