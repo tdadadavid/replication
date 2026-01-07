@@ -30,6 +30,7 @@ func Start() {
 		ok := dbsync.Handle(user)
 		if !ok {
 			w.WriteHeader(http.StatusInternalServerError)
+			return
 		}
 
 		w.WriteHeader(http.StatusOK)
