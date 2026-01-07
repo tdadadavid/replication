@@ -1,7 +1,11 @@
 package cmd
 
-import "fmt"
+import (
+	"dbreplication/internal/api"
+)
 
 func Execute() {
-	fmt.Println("Executing...")
+	// register otel spans and other neccessary things for observability
+
+	api.Start()
 }
