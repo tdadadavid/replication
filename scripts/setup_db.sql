@@ -1,7 +1,7 @@
 -- this will used across all database tables
 
 -- create database
-CREATE DATABASE users;
+CREATE DATABASE replication;
 
 -- create table users
 CREATE TABLE users (

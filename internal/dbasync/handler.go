@@ -1,13 +1,14 @@
 package dbasync
 
 import (
-	"database/sql"
 	"dbreplication/internal"
+
+	"github.com/jackc/pgx/v5"
 )
 
 type AsyncHandler struct {
-	Writer  *sql.DB   //master
-	Readers []*sql.DB //slaves
+	Leader    *pgx.Conn   //master
+	Followers []*pgx.Conn //slaves
 }
 
 func (h *AsyncHandler) Handle(users *internal.User) bool {

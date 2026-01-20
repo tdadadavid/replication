@@ -1,15 +1,43 @@
 package dbsync
 
 import (
-	"database/sql"
+	"context"
 	"dbreplication/internal"
+	"errors"
+	"fmt"
+
+	"github.com/jackc/pgx/v5"
 )
 
 type SyncHandler struct {
-	Writer  *sql.DB   //master
-	Readers []*sql.DB //slaves
+	Leader    *pgx.Conn   //master
+	Followers []*pgx.Conn //slaves
 }
 
-func (h *SyncHandler) Handle(user *internal.User) bool {
-	return false
+// For synchronous replication we are going to first write the master db
+// then write to the followers db, we are going to ensure all writes are complete before sending a response
+// otel spans are registered to watch performance of requests and db
+func (h *SyncHandler) Handle(ctx context.Context, user *internal.User) (bool, error) {
+
+	// 1. Write to master db
+	args := pgx.NamedArgs{
+		"email":   user.Email,
+		"balance": user.Balance,
+		"age":     user.Age,
+	}
+	query := "INSERT INTO users (email, balance, age) VALUE (@email, @balance, @age)"
+	_, err := h.Leader.Exec(ctx, query, args)
+	if err != nil {
+		return false, errors.New("failed to insert information into leader")
+	}
+
+	// 2. Write to each follower db
+	for idx, follower := range h.Followers {
+		_, err := follower.Exec(ctx, query, args)
+		if err != nil {
+			return false, fmt.Errorf("failed to replicate data to follower-%d, conn-info=%s. stopping all operations", idx, follower.Config().Host)
+		}
+	}
+
+	return true, nil
 }

@@ -1,26 +1,24 @@
 package cmd
 
 import (
+	"context"
 	"dbreplication/internal"
 	"dbreplication/internal/dbasync"
 	"dbreplication/internal/dbsync"
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
+	"os/signal"
 )
 
 func Execute() {
+	ctx := context.Background()
+	ctx, cancel := signal.NotifyContext(ctx, os.Interrupt, os.Kill)
+
 	// register otel spans and other neccessary things for observability
-
-	asyncHandler := &dbasync.AsyncHandler{
-		Writer:  nil,
-		Readers: nil,
-	}
-
-	syncHandler := &dbsync.SyncHandler{
-		Writer:  nil,
-		Readers: nil,
-	}
+	syncHandler := dbsync.Start()
+	asyncHandler := dbasync.Start()
 
 	mux := http.NewServeMux()
 
@@ -39,9 +37,10 @@ func Execute() {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		ok := syncHandler.Handle(user)
+		ok, err := syncHandler.Handle(ctx, user)
 		if !ok {
 			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
 			return
 		}
 
@@ -64,6 +63,9 @@ func Execute() {
 	port := 9000
 	fmt.Println("Starting server on port", port)
 	http.ListenAndServe(fmt.Sprintf(":%d", port), mux)
+	<-ctx.Done()
+	fmt.Println("Closing server on port", port)
+	cancel()
 }
 
 func decodeRequest(r *http.Request) (*internal.User, error) {
