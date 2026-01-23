@@ -6,6 +6,8 @@ To install dependencies:
 bun install
 ```
 
+Install `k6` from grafana
+
 To run:
 
 ```bash
