@@ -8,13 +8,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
 	"os/signal"
+	"syscall"
 )
 
 func Execute() {
 	ctx := context.Background()
-	ctx, cancel := signal.NotifyContext(ctx, os.Interrupt, os.Kill)
+	ctx, cancel := signal.NotifyContext(ctx, syscall.SIGKILL, syscall.SIGTERM)
 
 	// register otel spans and other neccessary things for observability
 	syncHandler := dbsync.Start()

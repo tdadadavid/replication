@@ -1,7 +1,7 @@
 package internal
 
 type User struct {
-	Email   string
-	Age     int
-	Balance float64
+	Email   string  `json:"email"`
+	Age     int     `json:"age"`
+	Balance float64 `json:"balance"`
 }

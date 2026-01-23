@@ -1,6 +1,8 @@
 package dbsync
 
 import (
+	"log/slog"
+
 	"github.com/jackc/pgx/v5"
 )
 
@@ -13,5 +15,6 @@ func Start() *SyncHandler {
 	return &SyncHandler{
 		Leader:    leader,
 		Followers: []*pgx.Conn{follower1, follower2, follower3},
+		log:       slog.Default(),
 	}
 }

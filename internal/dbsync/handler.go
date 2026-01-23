@@ -5,6 +5,7 @@ import (
 	"dbreplication/internal"
 	"errors"
 	"fmt"
+	"log/slog"
 
 	"github.com/jackc/pgx/v5"
 )
@@ -12,6 +13,7 @@ import (
 type SyncHandler struct {
 	Leader    *pgx.Conn   //master
 	Followers []*pgx.Conn //slaves
+	log       *slog.Logger
 }
 
 // For synchronous replication we are going to first write the master db
@@ -25,9 +27,10 @@ func (h *SyncHandler) Handle(ctx context.Context, user *internal.User) (bool, er
 		"balance": user.Balance,
 		"age":     user.Age,
 	}
-	query := "INSERT INTO users (email, balance, age) VALUE (@email, @balance, @age)"
+	query := "INSERT INTO users (email, balance, age) VALUES (@email, @balance, @age)"
 	_, err := h.Leader.Exec(ctx, query, args)
 	if err != nil {
+		h.log.Info("failed to insert into leader", "error", err.Error())
 		return false, errors.New("failed to insert information into leader")
 	}
 
@@ -35,6 +38,7 @@ func (h *SyncHandler) Handle(ctx context.Context, user *internal.User) (bool, er
 	for idx, follower := range h.Followers {
 		_, err := follower.Exec(ctx, query, args)
 		if err != nil {
+			h.log.Info("failed to replicate data. stopping all operations", "follower-id", idx, "host", follower.Config().Host)
 			return false, fmt.Errorf("failed to replicate data to follower-%d, conn-info=%s. stopping all operations", idx, follower.Config().Host)
 		}
 	}
