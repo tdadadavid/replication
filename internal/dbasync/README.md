@@ -7,10 +7,9 @@ Postgres achieves logical replication using the popular `Pub/Sub` pattern where 
 master or source-of-truth publishing events or data to other entities in the system regarded as `listeners` or `subscribers`
 
 In Postgres a `Publication` is created on specific tables on the `master` db and when any changed occurs. `Publication` are
-sent on DML operations except `TRUNCATE` statements, this means if the `master` performs a truncate query the `subscribers`
-won't be aware of these changes.
+sent on DML operations.
 
-_**DML Operations={INSERT,UPDATE,DELETE,TRUNCATE}_**
+_**DML Operations={INSERT,UPDATE,DELETE,TRUNCATE}**_
 
 It is important to know that schema changes are not also published to subscribers and both `publishers` & `subscribers`
 don't need to have the same schema.
@@ -82,7 +81,7 @@ You get this
 
 Awesome, I have been able to set up my `publication` on my `master` db, moving on to the subscription.
 
-Create subscription on the first follower db `slave1`
+Create subscription on the first follower db `follower1`
 
 ```postgresql
 CREATE SUBSCRIPTION usersub
