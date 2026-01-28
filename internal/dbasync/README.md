@@ -145,7 +145,7 @@ You will see how the count of each instance in realtime changes as master publis
 
 
 <video width="640" height="480" controls>
-  <source src="/docs/monitoring.mp4" type="video/mp4">
+  <source src="docs/monitoring.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
 
