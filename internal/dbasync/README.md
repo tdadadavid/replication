@@ -18,10 +18,12 @@ don't need to have the same schema.
 ## Syntax
 
 Creating a publication for a table
+
 ```postgresql
 CREATE PUBLICATION <publication_name> FOR TABLE <table_name> OPTIONS
 ```
 Subscriber
+
 ```postgresql
 CREATE SUBSCRIPTION <subcription_name> 
     CONNECTION 'host=<master_host_name> user=<master_user_name> dbname=<table_name> password=<password>'
@@ -66,37 +68,53 @@ You can also run these commands to see other information
 SELECT * FROM pg_publication
 ```
 You get this
+
 <img src="./docs/img_2.png">
+
 Or 
+
 ```postgresql
 SELECT * FROM pg_publication_tables;
 ```
+
 You get this
 <img src="./docs/img_3.png">
 
 Awesome, I have been able to set up my `publication` on my `master` db, moving on to the subscription.
 
 Create subscription on the first follower db `slave1`
+
 ```postgresql
 CREATE SUBSCRIPTION usersub
     CONNECTION 'host=master user=postgres dbname=replication password=postgres'
 PUBLICATION userpub;
 ```
+
 Then run `dRs+` on follower instance to see all subscriptions created.
 You get this.
+
+
 <img src="./docs/img_4.png">
+
+
 This shows the subscription was created successfully. One thing I noticed here is that the connection information is stored in plaintext
 meaning I have to find out how to securely connect.
 
 Run this same command for the remaining followers changing the subscription name only. I ran into this error when I executed the same
 command for `follower2`. 
+
+
 ```postgresql
 ERROR:  could not create replication slot "usersub": ERROR:  replication slot "usersub" already exists
 ```
+
+
 Digging into it, I found out that when a `subcription` is created postgres creates a `replication_slot` on the `master` using the name
 of the subscription as a unique identifier.
 
 After all these, confirm all replication slots are created on the publisher node (master)
+
+
 ```postgresql
 SELECT * FROM pg_replication_slots
 ```
