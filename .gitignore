@@ -1,3 +1,5 @@
 .env
 ./load/node_modules
 dbreplication
+/pgdata
+/data

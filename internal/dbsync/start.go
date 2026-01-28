@@ -1,12 +1,12 @@
 package dbsync
 
 import (
+	"dbreplication/internal/metrics"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"log/slog"
-
-	"github.com/jackc/pgx/v5"
 )
 
-func Start() *SyncHandler {
+func Start(m *metrics.ReplicationMetrics, logger *slog.Logger) *SyncHandler {
 	leader := connectLeader()
 	follower1 := connectFollower1()
 	follower2 := connectFollower2()
@@ -14,7 +14,8 @@ func Start() *SyncHandler {
 
 	return &SyncHandler{
 		Leader:    leader,
-		Followers: []*pgx.Conn{follower1, follower2, follower3},
-		log:       slog.Default(),
+		Followers: []*pgxpool.Pool{follower1, follower2, follower3},
+		log:       logger,
+		Metrics:   m,
 	}
 }

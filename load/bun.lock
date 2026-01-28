@@ -5,11 +5,12 @@
     "": {
       "name": "load",
       "dependencies": {
-        "@types/k6": "^1.5.0",
+        "@faker-js/faker": "^10.2.0",
         "k6": "^0.0.0",
       },
       "devDependencies": {
         "@types/bun": "latest",
+        "@types/k6": "^1.5.0",
       },
       "peerDependencies": {
         "typescript": "^5",
@@ -17,6 +18,8 @@
     },
   },
   "packages": {
+    "@faker-js/faker": ["@faker-js/faker@10.2.0", "", {}, "sha512-rTXwAsIxpCqzUnZvrxVh3L0QA0NzToqWBLAhV+zDV3MIIwiQhAZHMdPCIaj5n/yADu/tyk12wIPgL6YHGXJP+g=="],
+
     "@types/bun": ["@types/bun@1.3.5", "", { "dependencies": { "bun-types": "1.3.5" } }, "sha512-RnygCqNrd3srIPEWBd5LFeUYG7plCoH2Yw9WaZGyNmdTEei+gWaHqydbaIRkIkcbXwhBT94q78QljxN0Sk838w=="],
 
     "@types/k6": ["@types/k6@1.5.0", "", {}, "sha512-eQmSjjgYO1irlOmoZzGSuoYsK2uMrX3m/flcnqt5IDLA9D/vkPcRsAKfe9D6GrjXATD/Oo9ynQ6vc13V02WRmQ=="],

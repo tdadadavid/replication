@@ -9,6 +9,7 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@faker-js/faker": "^10.2.0",
     "k6": "^0.0.0"
   }
 }

@@ -1,17 +1,14 @@
 package dbasync
 
 import (
-	"github.com/jackc/pgx/v5"
+	"log/slog"
 )
 
-func Start() *AsyncHandler {
+func Start(logger *slog.Logger) *AsyncHandler {
 	leader := connectLeader()
-	follower1 := connectFollower1()
-	follower2 := connectFollower2()
-	follower3 := connectFollower3()
 
 	return &AsyncHandler{
-		Leader:    leader,
-		Followers: []*pgx.Conn{follower1, follower2, follower3},
+		Leader: leader,
+		log:    logger,
 	}
 }
