@@ -77,6 +77,7 @@ SELECT * FROM pg_publication_tables;
 ```
 
 You get this
+
 <img src="./docs/img_3.png">
 
 Awesome, I have been able to set up my `publication` on my `master` db, moving on to the subscription.
@@ -144,7 +145,7 @@ You will see how the count of each instance in realtime changes as master publis
 
 
 <video width="640" height="480" controls>
-  <source src="./docs/monitoring.mp4" type="video/mp4">
+  <source src="/docs/monitoring.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
 
