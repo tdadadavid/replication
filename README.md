@@ -1,35 +1,30 @@
-# Goal for this is to understand replication
+# The Goal for this is to understand replication
 
-## NOTE
-There several ways of handling read-replicas
-1. Application Layer, this is where you manually route the db requests to the appropraite replica in the application logic. This issue with this is that it application routing logic can be complex and error-prone.
-
-
-2. Database Layer, this is where you configure the database to route read requests to the appropriate replica. You can use tools like pgpool-II, pgBouncer or Vitess to achieve this. The issue with this is that it can be complex to set up and maintain, and it may not be suitable for all use cases.
-
-
-
+Check out the readme
+- [async](./internal/dbasync/README.md)
+- [sync](./internal/dbsync/README.md)
 
 ## Replication Types
 
-### synchronous replication
-The synchronous flow is
-1. send api request to master
-2. ensure write happens, then send to save within the same response
-3. the send response to client.
+1. Synchronous Replication
+The flow includes
+   1. send a `POST` request to master on endpoint `sync-users` ensure that write happens
+   2. Next, send it to all followers within the same response before responding to the client
+   3. Prometheus metrics are registered to track important information
 
 
-### asynchronous replication
+1. Asynchronous Replication
 The asynchronous flow is
-1. send api request to master 
-2. then send response to client.
-3. watch how replication is carried out in postgres
+   1. send a `POST` request to master on endpoint `async-users` ensure that write happens, then respond to a client immediately
+   2. watch how replication is carried out in postgres. Necessary configuration is [here](./internal/dbasync/README.md) 
 
-A docker compose is used for this.
-
+## NOTE
+There are several ways of handling read-replicas
+1. Application Layer, this is where you manually route the db requests to the appropriate replica in the application logic. This issue with this is that its application routing logic can be complex and error-prone.
+2. Database Layer, this is where you configure the database to route read requests to the appropriate replica. You can use tools like pgpool-II, pgBouncer or Vitess to achieve this. The issue with this is that it can be complex to set up and maintain, and it may not be suitable for all use cases.
 
 ---
-Something I saw online.
+Something I saw online, just dumping it here.
 <br>
 ```sql
 --- Verifying replication lag
