@@ -143,7 +143,7 @@ k6 run main.ts
 This will fire `10000` post requests to the `async-users` endpoint and this handler would write it to the master.
 You will see how the count of each instance in realtime changes as master publishes data to the followers
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/7wReZVXHfVg?si=L64JLUnR06zNV-H9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+[![Watch Video](https://img.youtube.com/vi/7wReZVXHfVg/maxresdefault.jpg)](https://youtu.be/7wReZVXHfVg)
 
 ---
 ## Just a note
