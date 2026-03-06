@@ -115,7 +115,7 @@ func Execute() {
 	<-ctx.Done()
 	fmt.Println("Shutting down server...")
 
-	shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	shutdownCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 	_ = srv.Shutdown(shutdownCtx)
 }

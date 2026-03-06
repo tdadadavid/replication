@@ -6,6 +6,11 @@ Check out the readme
 
 ## Replication Types
 
+a. Leader-based replication
+b. Leaderless replication -- `Dynamo-style`. checkout [dcache](https://github.com/tdadadavid/dcache)
+
+
+## Leader-based replication
 1. Synchronous Replication
 The flow includes
    1. send a `POST` request to master on endpoint `sync-users` ensure that write happens
